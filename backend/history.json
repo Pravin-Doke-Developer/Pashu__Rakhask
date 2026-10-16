@@ -1,0 +1,90 @@
+[
+  {
+    "timestamp": "2026-10-15T18:49:19.643698+00:00",
+    "model_type": "disease",
+    "filename": "healthy.jpg",
+    "class_name": "healthy",
+    "confidence": 0.96,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-15T18:52:40.800950+00:00",
+    "model_type": "disease",
+    "filename": "healthy.jpg",
+    "class_name": "healthy",
+    "confidence": 0.96,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-16T06:57:43.779791+00:00",
+    "model_type": "disease",
+    "filename": "BrownSwisscattle3_c.jpg",
+    "class_name": "healthy",
+    "confidence": 99.72,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-16T06:58:45.686461+00:00",
+    "model_type": "disease",
+    "filename": "1_jpg.rf.e476869ac32637579dd94f0a8a631144.jpg",
+    "class_name": "lumpy",
+    "confidence": 100.0,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-16T07:03:19.521208+00:00",
+    "model_type": "breed",
+    "filename": "Jerseycattle13_c.jpg",
+    "class_name": "Jersey cattle",
+    "confidence": 60.99,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-16T07:08:29.785751+00:00",
+    "model_type": "breed",
+    "filename": "BrownSwisscattle3.jpg",
+    "class_name": "Red Dane cattle",
+    "confidence": 55.76,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-16T07:09:17.202885+00:00",
+    "model_type": "disease",
+    "filename": "-32-_jpg.rf.0d7187c3a1ee018df9ce79da5b57463d.jpg",
+    "class_name": "foot-and-mouth",
+    "confidence": 68.04,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-16T07:11:57.799174+00:00",
+    "model_type": "disease",
+    "filename": "-15-_jpg.rf.7bd97d4dd140f2fd0149627463ee132b.jpg",
+    "class_name": "foot-and-mouth",
+    "confidence": 70.15,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-16T07:13:11.646358+00:00",
+    "model_type": "breed",
+    "filename": "Jerseycattle0_c.jpg",
+    "class_name": "Jersey cattle",
+    "confidence": 72.86,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-16T07:33:51.027647+00:00",
+    "model_type": "disease",
+    "filename": "camera-1792136029109.jpg",
+    "class_name": "healthy",
+    "confidence": 92.43,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-16T08:03:58.404992+00:00",
+    "model_type": "disease",
+    "filename": "camera-1792137833175.jpg",
+    "class_name": "healthy",
+    "confidence": 92.74,
+    "source": "api_inference"
+  }
+]

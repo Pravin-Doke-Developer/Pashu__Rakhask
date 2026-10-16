@@ -1,0 +1,63 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.env
+.venv
+.venv311
+.env.example
+
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Datasets - DO NOT COMMIT (large files)
+datasets/disease/
+datasets/breed/
+datasets/disease_split
+datasets/quarantine
+datasets/*.zip
+datasets/*.tar.gz
+datasets
+
+
+# Model artifacts - DO NOT COMMIT (large files)
+artifacts/disease_model/*.h5
+artifacts/disease_model/*.keras
+artifacts/disease_model/*.tflite
+artifacts/breed_model/*.h5
+artifacts/breed_model/*.keras
+artifacts/breed_model/*.tflite
+
+# Node modules (frontend)
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# Backend
+backend/__pycache__/
+backend/uploads/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+scratch/

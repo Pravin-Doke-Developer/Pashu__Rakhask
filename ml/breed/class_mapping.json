@@ -1,0 +1,10 @@
+{
+  "classes": [
+    "Ayrshire cattle",
+    "Brown Swiss cattle",
+    "Holstein Friesian cattle",
+    "Jersey cattle",
+    "Red Dane cattle"
+  ],
+  "notes": "This mapping reflects the class folders currently present in datasets/breed/Cattle Breeds. Verify the exact mapping with the exported model before deployment."
+}

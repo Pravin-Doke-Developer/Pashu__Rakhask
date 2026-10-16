@@ -1,0 +1,16 @@
+{
+  "class_to_index": {
+    "Ayrshire cattle": 0,
+    "Brown Swiss cattle": 1,
+    "Holstein Friesian cattle": 2,
+    "Jersey cattle": 3,
+    "Red Dane cattle": 4
+  },
+  "index_to_class": {
+    "0": "Ayrshire cattle",
+    "1": "Brown Swiss cattle",
+    "2": "Holstein Friesian cattle",
+    "3": "Jersey cattle",
+    "4": "Red Dane cattle"
+  }
+}

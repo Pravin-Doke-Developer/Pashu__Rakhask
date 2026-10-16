@@ -1,0 +1,68 @@
+{
+  "model_type": "breed",
+  "architecture": "MobileNetV2",
+  "image_size": [
+    224,
+    224
+  ],
+  "input_format": "RGB",
+  "input_range": [
+    0,
+    255
+  ],
+  "preprocessing": "rescale RGB pixels to [-1, 1] inside model",
+  "classes": [
+    "Ayrshire cattle",
+    "Brown Swiss cattle",
+    "Holstein Friesian cattle",
+    "Jersey cattle",
+    "Red Dane cattle"
+  ],
+  "test_accuracy": 0.7747252583503723,
+  "test_loss": 0.7537267208099365,
+  "classification_report": {
+    "Ayrshire cattle": {
+      "precision": 0.825,
+      "recall": 0.825,
+      "f1-score": 0.825,
+      "support": 40.0
+    },
+    "Brown Swiss cattle": {
+      "precision": 0.6153846153846154,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.64,
+      "support": 36.0
+    },
+    "Holstein Friesian cattle": {
+      "precision": 0.8292682926829268,
+      "recall": 0.8947368421052632,
+      "f1-score": 0.8607594936708861,
+      "support": 38.0
+    },
+    "Jersey cattle": {
+      "precision": 0.8387096774193549,
+      "recall": 0.6842105263157895,
+      "f1-score": 0.7536231884057971,
+      "support": 38.0
+    },
+    "Red Dane cattle": {
+      "precision": 0.7741935483870968,
+      "recall": 0.8,
+      "f1-score": 0.7868852459016393,
+      "support": 30.0
+    },
+    "accuracy": 0.7747252747252747,
+    "macro avg": {
+      "precision": 0.7765112267747988,
+      "recall": 0.7741228070175439,
+      "f1-score": 0.7732535855956645,
+      "support": 182.0
+    },
+    "weighted avg": {
+      "precision": 0.7789165685128887,
+      "recall": 0.7747252747252747,
+      "f1-score": 0.7746873587690282,
+      "support": 182.0
+    }
+  }
+}

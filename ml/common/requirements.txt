@@ -1,0 +1,9 @@
+# ML Common Utilities - Python Dependencies
+# Install with: pip install -r requirements.txt
+
+Pillow>=9.0.0
+numpy>=1.21.0
+matplotlib>=3.5.0
+imagehash>=4.3.0
+tqdm>=4.62.0
+scikit-learn>=1.0.0

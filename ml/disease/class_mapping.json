@@ -1,0 +1,8 @@
+{
+  "classes": [
+    "healthy",
+    "lumpy",
+    "foot-and-mouth"
+  ],
+  "notes": "This mapping reflects the class folders currently present in datasets/disease. Verify the final mapping from the trained model export before deployment."
+}
