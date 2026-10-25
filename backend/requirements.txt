@@ -1,1 +1,10 @@
--r ../requirements.txt
+Flask==3.0.3
+Flask-Cors==4.0.1
+Pillow==10.4.0
+numpy==1.26.4
+tensorflow
+python-dotenv==1.0.1
+Flask
+Flask-Cors
+gunicorn
+
