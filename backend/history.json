@@ -350,5 +350,13 @@
     "class_name": "cholistani",
     "confidence": 85.25,
     "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T13:43:41.361881+00:00",
+    "model_type": "disease",
+    "filename": "cholistani_11.jpg",
+    "class_name": "Lumpy_Skin_Disease",
+    "confidence": 99.87,
+    "source": "api_inference"
   }
 ]

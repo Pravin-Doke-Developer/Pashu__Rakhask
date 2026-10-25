@@ -9,17 +9,19 @@ import {
   ShieldAlert,
   Stethoscope,
 } from 'lucide-react';
+import { useTranslation } from '../contexts/LanguageContext';
+import LanguageSelector from './LanguageSelector';
 
-const navItems = [
-  { to: '/', label: 'Overview', icon: Home, end: true },
-  { to: '/disease', label: 'Disease screening', icon: Stethoscope },
-  { to: '/breed', label: 'Breed recognition', icon: BookHeart },
-  { to: '/history', label: 'History', icon: History },
-  { to: '/schemes', label: 'Government schemes', icon: Landmark },
-  { to: '/about', label: 'About', icon: ShieldAlert },
-];
+function Navigation({ mobile = false, t }) {
+  const navItems = [
+    { to: '/', label: t.nav.home, icon: Home, end: true },
+    { to: '/disease', label: t.nav.disease, icon: Stethoscope },
+    { to: '/breed', label: t.nav.breed, icon: BookHeart },
+    { to: '/history', label: t.nav.history, icon: History },
+    { to: '/schemes', label: t.nav.government, icon: Landmark },
+    { to: '/about', label: t.nav.care, icon: ShieldAlert },
+  ];
 
-function Navigation({ mobile = false }) {
   return (
     <nav
       aria-label="Main navigation"
@@ -56,7 +58,18 @@ function Navigation({ mobile = false }) {
 
 export default function Layout({ children }) {
   const { pathname } = useLocation();
-  const currentPage = navItems.find(({ to }) => to === pathname)?.label || 'Analysis results';
+  const { t } = useTranslation();
+
+  const navItems = [
+    { to: '/', label: t.nav.home, icon: Home, end: true },
+    { to: '/disease', label: t.nav.disease, icon: Stethoscope },
+    { to: '/breed', label: t.nav.breed, icon: BookHeart },
+    { to: '/history', label: t.nav.history, icon: History },
+    { to: '/schemes', label: t.nav.government, icon: Landmark },
+    { to: '/about', label: t.nav.care, icon: ShieldAlert },
+  ];
+
+  const currentPage = navItems.find(({ to }) => to === pathname)?.label || t.results.analysisOutcome;
 
   return (
     <div className="min-h-screen bg-[#f6f7f2] text-slate-800 lg:flex">
@@ -76,7 +89,7 @@ export default function Layout({ children }) {
         <p className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
           Workspace
         </p>
-        <Navigation />
+        <Navigation t={t} />
 
         <div className="mt-auto overflow-hidden rounded-2xl bg-[#f1f5e9]">
           <img
@@ -103,7 +116,7 @@ export default function Layout({ children }) {
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-700 text-white">
                 <Activity className="h-[18px] w-[18px]" />
               </span>
-              <span className="text-sm font-bold tracking-tight text-slate-900">Herdwell</span>
+              <span className="text-sm font-bold tracking-tight text-slate-900">PashuRakshak</span>
             </Link>
             <div className="hidden lg:block">
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-700">
@@ -111,9 +124,12 @@ export default function Layout({ children }) {
               </p>
               <h1 className="mt-1 text-lg font-semibold tracking-tight text-slate-900">{currentPage}</h1>
             </div>
-            <div className="ml-auto flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              AI screening tools
+            <div className="ml-auto flex items-center gap-4">
+              <LanguageSelector />
+              <div className="hidden sm:flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                AI screening tools
+              </div>
             </div>
           </div>
         </header>
@@ -124,7 +140,7 @@ export default function Layout({ children }) {
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[#e8eadf] bg-white/95 px-2 pb-[env(safe-area-inset-bottom)] pt-1 backdrop-blur-xl lg:hidden">
-        <Navigation mobile />
+        <Navigation mobile t={t} />
       </div>
     </div>
   );

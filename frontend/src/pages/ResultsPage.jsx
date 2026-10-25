@@ -1,27 +1,34 @@
 import { ArrowLeft, AlertTriangle, CheckCircle2, Info, ShieldAlert, Syringe, HeartPulse, Home, TrendingUp, Scale, DollarSign } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from '../contexts/LanguageContext';
+import { translateResult } from '../i18n/resultTranslations';
 
 export default function ResultsPage() {
   const { state } = useLocation();
-  const result = state || {};
+  const { language, t } = useTranslation();
+  const rawResult = state || {};
+
+  // Translate the result based on selected language
+  const result = translateResult(rawResult, language);
 
   const isModelConfigured = result?.status === 'ok';
   const isDiseaseScreening = result?.model_type === 'disease' || result?.source === 'disease';
+  const labels = result.labels || t.results;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium uppercase tracking-[0.2em] text-slate-500">
-            {isDiseaseScreening ? 'Disease screening result' : 'Breed recognition result'}
+            {isDiseaseScreening ? t.results.diseaseResult : t.results.breedResult}
           </p>
           <h1 className="mt-1 text-3xl font-bold text-slate-900">
-            {isDiseaseScreening ? 'Preliminary screening outcome' : 'Analysis outcome'}
+            {isDiseaseScreening ? t.results.screeningOutcome : t.results.analysisOutcome}
           </h1>
         </div>
         <Link to="/" className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">
           <ArrowLeft className="h-4 w-4" />
-          Back home
+          {t.results.backHome}
         </Link>
       </div>
 
@@ -30,9 +37,9 @@ export default function ResultsPage() {
           <div className="flex items-start gap-3 text-amber-900">
             <AlertTriangle className="mt-0.5 h-5 w-5" />
             <div>
-              <h2 className="text-xl font-semibold">Model not configured</h2>
+              <h2 className="text-xl font-semibold">{t.results.modelNotConfigured}</h2>
               <p className="mt-2 text-sm text-amber-800">
-                The backend is running, but the required trained model artifacts have not been added yet. The app is intentionally not showing a fake prediction.
+                {t.results.modelNotConfiguredMsg}
               </p>
             </div>
           </div>
@@ -46,7 +53,7 @@ export default function ResultsPage() {
               </div>
               <div>
                 <p className="text-sm text-slate-500">
-                  {isDiseaseScreening ? 'Screening result' : 'Predicted breed'}
+                  {isDiseaseScreening ? t.results.screeningResult : t.results.predictedBreed}
                 </p>
                 <h2 className="text-2xl font-semibold text-slate-900">
                   {result.information?.title || result.class_name || 'Unknown'}
@@ -56,7 +63,7 @@ export default function ResultsPage() {
 
             <div className="rounded-xl bg-slate-50 p-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-600">Confidence</span>
+                <span className="text-sm text-slate-600">{labels.confidence}</span>
                 <span className="text-lg font-bold text-slate-900">{result.confidence || 0}%</span>
               </div>
               <div className="mt-3 h-2.5 rounded-full bg-slate-200">
@@ -73,7 +80,7 @@ export default function ResultsPage() {
                     <Info className="h-5 w-5" />
                   </div>
                   <h2 className="text-lg font-semibold text-slate-900">
-                    About {result.information.title || result.class_name}
+                    {t.results.about} {result.information.title || result.class_name}
                   </h2>
                 </div>
                 <p className="text-sm leading-6 text-slate-600">
@@ -94,14 +101,14 @@ export default function ResultsPage() {
                     <div className="rounded-xl bg-purple-100 p-3 text-purple-700">
                       <TrendingUp className="h-5 w-5" />
                     </div>
-                    <h2 className="text-lg font-semibold text-slate-900">Breed Information</h2>
+                    <h2 className="text-lg font-semibold text-slate-900">{labels.breedInfo}</h2>
                   </div>
                   <div className="grid gap-4 md:grid-cols-3">
                     {result.information.market_demand && (
                       <div className="rounded-lg bg-slate-50 p-4">
                         <div className="flex items-center gap-2 text-sm font-medium text-slate-600">
                           <TrendingUp className="h-4 w-4" />
-                          Market Demand
+                          {labels.marketDemand}
                         </div>
                         <p className="mt-1 text-sm font-semibold text-slate-900">{result.information.market_demand}</p>
                       </div>
@@ -110,7 +117,7 @@ export default function ResultsPage() {
                       <div className="rounded-lg bg-slate-50 p-4">
                         <div className="flex items-center gap-2 text-sm font-medium text-slate-600">
                           <Scale className="h-4 w-4" />
-                          General Weight
+                          {labels.generalWeight}
                         </div>
                         <p className="mt-1 text-sm font-semibold text-slate-900">{result.information.general_weight}</p>
                       </div>
@@ -119,7 +126,7 @@ export default function ResultsPage() {
                       <div className="rounded-lg bg-slate-50 p-4">
                         <div className="flex items-center gap-2 text-sm font-medium text-slate-600">
                           <DollarSign className="h-4 w-4" />
-                          Market Price
+                          {labels.marketPrice}
                         </div>
                         <p className="mt-1 text-sm font-semibold text-slate-900">{result.information.market_price}</p>
                       </div>
@@ -135,8 +142,8 @@ export default function ResultsPage() {
                       <HeartPulse className="h-5 w-5" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-semibold text-slate-900">Symptoms</h2>
-                      <p className="text-xs text-slate-500">Common signs to watch for</p>
+                      <h2 className="text-lg font-semibold text-slate-900">{labels.symptoms}</h2>
+                      <p className="text-xs text-slate-500">{labels.symptomsSubtitle}</p>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -159,8 +166,8 @@ export default function ResultsPage() {
                       <Home className="h-5 w-5" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-semibold text-slate-900">Home Care Solutions</h2>
-                      <p className="text-xs text-slate-500">Immediate care you can provide</p>
+                      <h2 className="text-lg font-semibold text-slate-900">{labels.homeCare}</h2>
+                      <p className="text-xs text-slate-500">{labels.homeCareSubtitle}</p>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -183,20 +190,20 @@ export default function ResultsPage() {
               <div className="rounded-xl bg-amber-100 p-3 text-amber-700">
                 <ShieldAlert className="h-5 w-5" />
               </div>
-              <h2 className="text-lg font-semibold text-slate-900">Important guidance</h2>
+              <h2 className="text-lg font-semibold text-slate-900">{t.results.importantGuidance}</h2>
             </div>
             {isDiseaseScreening && (
               <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900">
-                Screening only — this is not a confirmed veterinary diagnosis.
+                {t.results.screeningOnly}
               </p>
             )}
             <p className="text-sm leading-6 text-slate-600">
-              {result?.message || 'This result is a preliminary model-based screening output and should be confirmed by a qualified veterinarian.'}
+              {result?.message || t.results.message}
             </p>
             <ul className="space-y-2 text-sm text-slate-600">
-              <li>• A supported class prediction is not a confirmed medical diagnosis.</li>
-              <li>• If the animal appears unwell, isolate it and consult a veterinarian promptly.</li>
-              <li>• Always combine model output with visual inspection and professional expertise.</li>
+              <li>{t.results.note1}</li>
+              <li>{t.results.note2}</li>
+              <li>{t.results.note3}</li>
             </ul>
           </div>
         </div>
