@@ -86,5 +86,45 @@
     "class_name": "healthy",
     "confidence": 92.74,
     "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T08:54:15.352709+00:00",
+    "model_type": "disease",
+    "filename": "cholistani cross_047.jpg",
+    "class_name": "healthy_cow",
+    "confidence": 96.36,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T08:54:57.311965+00:00",
+    "model_type": "breed",
+    "filename": "fresian cross_004.jpg",
+    "class_name": "fresian cross",
+    "confidence": 90.27,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T08:55:30.917436+00:00",
+    "model_type": "breed",
+    "filename": "Border_collie_006.jpg",
+    "class_name": "Border_collie",
+    "confidence": 99.22,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T08:56:56.678649+00:00",
+    "model_type": "disease",
+    "filename": "camera-1792918610608.jpg",
+    "class_name": "healthy_cat",
+    "confidence": 32.01,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T08:57:22.383660+00:00",
+    "model_type": "breed",
+    "filename": "camera-1792918640113.jpg",
+    "class_name": "Lowchen",
+    "confidence": 45.62,
+    "source": "api_inference"
   }
 ]

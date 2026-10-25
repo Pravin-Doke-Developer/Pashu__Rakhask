@@ -59,22 +59,20 @@ class TestAnimalHealthAPI(unittest.TestCase):
         expected_root = Path(__file__).resolve().parents[2] / 'artifacts'
         self.assertEqual(
             self.model_service.model_paths['disease'],
-            expected_root / 'disease_model' / 'disease_model.keras',
+            expected_root / 'disease_model' / 'PashuRakshak_Disease_Model.keras',
         )
         self.assertEqual(
-            self.model_service.get_supported_classes('disease'),
-            ['foot-and-mouth', 'healthy', 'lumpy'],
+            self.model_service.mapping_paths['disease'],
+            expected_root / 'disease_model' / 'PashuRakshak_Class_Names.json',
         )
         self.assertEqual(
-            self.model_service.get_supported_classes('breed'),
-            [
-                'Ayrshire cattle',
-                'Brown Swiss cattle',
-                'Holstein Friesian cattle',
-                'Jersey cattle',
-                'Red Dane cattle',
-            ],
+            self.model_service.model_paths['animal_type'],
+            expected_root / 'breed_model' / 'PashuRakshak_AnimalType.keras',
         )
+        self.assertIn('healthy_cow', self.model_service.get_supported_classes('disease'))
+        self.assertIn('brahman', self.model_service.get_supported_classes('breed'))
+        self.assertIn('siamese', self.model_service.get_supported_classes('breed'))
+        self.assertIn('Beagle', self.model_service.get_supported_classes('breed'))
 
     def test_empty_upload_rejected(self):
         response = self.client.post('/predict/disease', data={})

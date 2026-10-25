@@ -1,0 +1,20 @@
+{
+  "class_names": [
+    "abyssinian",
+    "bombay",
+    "egyptian mau",
+    "himalayan",
+    "maine coon",
+    "regdoll",
+    "russian blue",
+    "scottish fold",
+    "siamese",
+    "sphynx"
+  ],
+  "image_size": 224,
+  "architecture": "EfficientNetV2B0",
+  "animal_type": "Cat",
+  "excluded_breeds": [
+    "exotic shorthair"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "class_names": [
+    "Cat",
+    "Cow",
+    "Dog"
+  ],
+  "image_size": 224,
+  "architecture": "EfficientNetV2B0"
+}

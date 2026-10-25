@@ -10,7 +10,7 @@ env/
 .venv
 .venv311
 .env.example
-
+.pashur/
 
 # IDE
 .vscode/

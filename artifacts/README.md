@@ -7,16 +7,23 @@ This directory stores trained model files. **Do not commit model files to Git** 
 ```
 artifacts/
 ├── disease_model/
-│   ├── disease_model.keras      # Trained Keras model
-│   ├── class_mapping.json       # Class label mapping
-│   ├── training_config.json     # Training hyperparameters
-│   └── evaluation_report.json   # Test set metrics
+│   ├── PashuRakshak_Disease_Model.keras
+│   └── PashuRakshak_Class_Names.json
 └── breed_model/
-    ├── breed_model.keras
-    ├── class_mapping.json
-    ├── training_config.json
-    └── evaluation_report.json
+    ├── PashuRakshak_AnimalType.keras
+    ├── PashuRakshak_AnimalType_Classes.json
+    ├── PashuRakshak_CowBreed_BalancedBatch.keras
+    ├── PashuRakshak_CowBreed_BalancedBatch_Classes.json
+    ├── PashuRakshak_CatBreed_10Class.keras
+    ├── PashuRakshak_CatBreed_10Class_Classes.json
+    ├── PashuRakshak_DogBreed_129_Best.keras
+    └── PashuRakshak_DogBreed_129_Classes.json
 ```
+
+Breed recognition first classifies the image as Cat, Cow, or Dog using
+`PashuRakshak_AnimalType.keras`, then runs the matching cat, cow, or dog breed
+model. Disease screening uses `PashuRakshak_Disease_Model.keras` directly.
+Class names are read in their listed order from the accompanying JSON files.
 
 ## How to Obtain
 
@@ -51,6 +58,6 @@ corresponding `ml/<task>/class_mapping.json` file used by the backend.
 | File | Purpose |
 |------|---------|
 | `*.keras` | The trained TensorFlow/Keras model weights and architecture |
-| `class_names.json` | Maps integer indices to human-readable class labels |
+| `*_Classes.json`, `PashuRakshak_Class_Names.json` | Class labels in model output-index order |
 | `training_config.json` | Records the exact training setup for reproducibility |
 | `evaluation_report.json` | Test set accuracy, precision, recall, F1, confusion matrix |

@@ -66,18 +66,24 @@ animal-health-ai/
 ### Windows PowerShell
 
 ```powershell
-cd c:\DYPIT\CEP\animal-health-ai
-# TensorFlow 2.17.1 supports Python 3.9–3.12; Python 3.11 is recommended.
+cd C:\path\to\Pashu-Rakshak
+# Use 64-bit Python. TensorFlow 2.17.1 supports Python 3.9–3.12; Python 3.11 is recommended.
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-python -m pip install -r backend\requirements.txt
+python -m pip install -r requirements.txt
 ```
+
+The root `requirements.txt` installs the Python packages needed by the backend,
+including TensorFlow for model inference. The frontend requires Node.js 18+ and
+npm; its packages are installed separately from `frontend\package.json`. The
+optional dataset utilities have additional dependencies listed in
+`ml\common\requirements.txt`.
 
 ### Frontend
 
 ```powershell
-cd c:\DYPIT\CEP\animal-health-ai\frontend
+cd C:\path\to\Pashu-Rakshak\frontend
 npm.cmd install
 Copy-Item .env.example .env
 npm.cmd run dev
@@ -86,7 +92,7 @@ npm.cmd run dev
 ### Backend
 
 ```powershell
-cd c:\DYPIT\CEP\animal-health-ai\backend
+cd C:\path\to\Pashu-Rakshak\backend
 Copy-Item .env.example .env
 python app.py
 ```
@@ -126,14 +132,14 @@ Disease predictions are screening results only and are not confirmed diagnoses.
 ### Backend tests
 
 ```powershell
-cd c:\DYPIT\CEP\animal-health-ai
+cd C:\path\to\Pashu-Rakshak
 python -m unittest discover -s backend/tests -q
 ```
 
 ### Frontend build check
 
 ```powershell
-cd c:\DYPIT\CEP\animal-health-ai\frontend
+cd C:\path\to\Pashu-Rakshak\frontend
 npm.cmd run build
 ```
 
