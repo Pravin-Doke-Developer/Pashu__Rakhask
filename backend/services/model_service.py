@@ -50,11 +50,26 @@ CLASS_INFORMATION = {
                 'A highly contagious viral disease affecting cloven-hoofed animals, '
                 'including cattle.'
             ),
+            'symptoms': [
+                'High fever (up to 41°C)',
+                'Blisters or sores in the mouth and on the feet',
+                'Excessive drooling and foaming at the mouth',
+                'Lameness and difficulty walking',
+                'Reduced appetite and weight loss',
+                'Decreased milk production in dairy animals',
+            ],
+            'home_care': [
+                'Isolate the affected animal immediately to prevent spread',
+                'Provide soft, easily digestible food and fresh water',
+                'Keep the animal in a clean, comfortable environment',
+                'Clean mouth and feet with mild antiseptic solution',
+                'Apply soothing ointments to blisters if recommended by vet',
+                'Monitor temperature and other vital signs regularly',
+            ],
             'details': [
-                'Possible signs include fever, blisters or sores in the mouth and on the feet, '
-                'drooling, and difficulty walking.',
-                'If suspected, contact a veterinarian or local animal-health authority promptly '
-                'and follow their advice about limiting animal movement.',
+                'If suspected, contact a veterinarian or local animal-health authority promptly.',
+                'Follow their advice about limiting animal movement.',
+                'This is a reportable disease in many regions.',
             ],
         },
         'Lumpy_Skin_Disease': {
@@ -63,11 +78,27 @@ CLASS_INFORMATION = {
                 'A viral cattle disease that can cause skin nodules and may spread between '
                 'animals, including through insect vectors.'
             ),
+            'symptoms': [
+                'High fever (up to 41°C)',
+                'Firm, raised skin nodules (2-5 cm in diameter)',
+                'Swollen lymph nodes',
+                'Nasal and ocular discharge',
+                'Reduced appetite and milk production',
+                'Weight loss and emaciation',
+            ],
+            'home_care': [
+                'Isolate affected animals to prevent spread',
+                'Use insect repellents to control vectors (flies, mosquitoes)',
+                'Clean and disinfect wounds with antiseptic solution',
+                'Provide nutritious diet and plenty of fresh water',
+                'Apply antibiotic ointment to secondary infections',
+                'Keep the animal cool and comfortable',
+                'Monitor for secondary bacterial infections',
+            ],
             'details': [
-                'Possible signs include fever, firm skin nodules, swollen lymph nodes, and '
-                'reduced appetite or milk production.',
-                'Contact a veterinarian for assessment and advice on limiting spread; an image '
-                'prediction alone cannot confirm the disease.',
+                'Contact a veterinarian for assessment and advice on limiting spread.',
+                'An image prediction alone cannot confirm the disease.',
+                'Vaccination is available for prevention in endemic areas.',
             ],
         },
         'Mastitis_Disease': {
@@ -75,19 +106,55 @@ CLASS_INFORMATION = {
             'description': (
                 'An inflammatory condition of the mammary gland, commonly affecting dairy cows.'
             ),
+            'symptoms': [
+                'Swollen, hot, or painful udder',
+                'Changes in milk appearance (watery, bloody, or containing pus)',
+                'Clots or flakes in the milk',
+                'Reduced milk production',
+                'Fever and lethargy in severe cases',
+                'Reluctance to let calf suckle',
+            ],
+            'home_care': [
+                'Apply warm compresses to the affected udder',
+                'Gently massage the udder to improve circulation',
+                'Milk the affected quarter frequently to remove infected milk',
+                'Ensure clean milking equipment and hygiene',
+                'Provide clean, dry bedding',
+                'Increase fluid intake',
+                'Consider natural anti-inflammatory remedies like turmeric',
+            ],
             'details': [
-                'Signs may include swollen, hot, or painful udders, and changes in milk appearance.',
                 'Consult a veterinarian for proper diagnosis and treatment.',
+                'Antibiotics may be necessary for bacterial mastitis.',
+                'Early treatment is crucial to prevent permanent damage.',
             ],
         },
         'demodicosis': {
-            'title': 'Demodicosis',
+            'title': 'Demodicosis (Mange)',
             'description': (
                 'A skin condition caused by Demodex mites, affecting dogs and other animals.'
             ),
+            'symptoms': [
+                'Patchy hair loss (alopecia)',
+                'Red, inflamed skin',
+                'Scaling and crusting',
+                'Itching (may be mild to severe)',
+                'Thickening of the skin in chronic cases',
+                'Secondary bacterial infections',
+            ],
+            'home_care': [
+                'Bathe with medicated or benzoyl peroxide shampoo',
+                'Apply aloe vera gel to soothe irritated skin',
+                'Boost immune system with nutritious diet',
+                'Keep the animal clean and dry',
+                'Wash bedding regularly in hot water',
+                'Avoid stress and maintain good overall health',
+                'Supplement with omega-3 fatty acids for skin health',
+            ],
             'details': [
-                'Common signs include hair loss, redness, and skin lesions.',
                 'Veterinary consultation recommended for appropriate treatment.',
+                'May require prescription medications in severe cases.',
+                'Some animals may have genetic predisposition.',
             ],
         },
         'dermatitis': {
@@ -95,9 +162,27 @@ CLASS_INFORMATION = {
             'description': (
                 'Inflammation of the skin that can have various causes including allergies, infections, or irritants.'
             ),
+            'symptoms': [
+                'Red, inflamed skin',
+                'Intense itching and scratching',
+                'Skin lesions or rashes',
+                'Dry, flaky, or oozing skin',
+                'Hair loss in affected areas',
+                'Bad odor from skin infections',
+            ],
+            'home_care': [
+                'Identify and remove allergens if possible',
+                'Bathe with gentle, hypoallergenic shampoo',
+                'Apply cool compresses to reduce inflammation',
+                'Use oatmeal baths to soothe itching',
+                'Apply coconut oil or aloe vera to affected areas',
+                'Keep the animal from scratching (use Elizabethan collar if needed)',
+                'Ensure clean, dry living environment',
+            ],
             'details': [
-                'Symptoms may include redness, itching, and skin lesions.',
-                'Consult a veterinarian to determine the underlying cause and appropriate treatment.',
+                'Consult a veterinarian to determine the underlying cause.',
+                'Allergy testing may be recommended for chronic cases.',
+                'May require antihistamines or other medications.',
             ],
         },
         'flea_allergy': {
@@ -105,9 +190,28 @@ CLASS_INFORMATION = {
             'description': (
                 'An allergic reaction to flea saliva, commonly affecting dogs and cats.'
             ),
+            'symptoms': [
+                'Intense itching, especially near tail base and hind legs',
+                'Red, inflamed skin',
+                'Hair loss and hot spots',
+                'Skin infections from excessive scratching',
+                'Visible fleas or flea dirt (black specks)',
+                'Restlessness and discomfort',
+            ],
+            'home_care': [
+                'Use flea comb to remove fleas and flea dirt',
+                'Bathe with flea shampoo',
+                'Apply natural flea repellents (cedar oil, neem)',
+                'Wash all bedding in hot water',
+                'Vacuum home thoroughly and frequently',
+                'Use flea prevention treatments (collars, spot-on)',
+                'Treat all pets in the household simultaneously',
+                'Soothe irritated skin with cool compresses',
+            ],
             'details': [
-                'Signs include intense itching, redness, and skin irritation, especially near the tail base.',
                 'Flea control and veterinary treatment are typically necessary.',
+                'Even one flea bite can trigger allergic reaction in sensitive animals.',
+                'Prevention is key to managing this condition.',
             ],
         },
         'fungal_infections': {
@@ -115,9 +219,144 @@ CLASS_INFORMATION = {
             'description': (
                 'Skin infections caused by various types of fungi, affecting multiple animal species.'
             ),
+            'symptoms': [
+                'Circular, ring-shaped patches of hair loss',
+                'Red, scaly borders around patches',
+                'Crusting and scaling of skin',
+                'Itching (may vary by type of fungus)',
+                'Broken or brittle hair',
+                'Spreading lesions if untreated',
+            ],
+            'home_care': [
+                'Clip hair around affected areas',
+                'Clean with antifungal solution (diluted apple cider vinegar)',
+                'Apply antifungal creams or ointments',
+                'Use medicated shampoos as directed',
+                'Keep the area clean and dry',
+                'Disinfect grooming tools and bedding',
+                'Isolate infected animals to prevent spread',
+                'Boost immune system with proper nutrition',
+            ],
             'details': [
-                'May present as circular patches, hair loss, or skin scaling.',
                 'Veterinary diagnosis and antifungal treatment are usually required.',
+                'Some fungal infections can spread to humans (zoonotic).',
+                'Treatment may take several weeks to months.',
+            ],
+        },
+        'hot_spots_disease': {
+            'title': 'Hot spots (Acute moist dermatitis)',
+            'description': (
+                'A common skin condition in dogs characterized by red, moist, and painful lesions.'
+            ),
+            'symptoms': [
+                'Red, moist, and oozing skin lesions',
+                'Intense itching and pain',
+                'Hair loss around the lesion',
+                'Bad odor from infected area',
+                'Rapid spreading if not treated',
+                'Animal may lick or chew the area excessively',
+            ],
+            'home_care': [
+                'Clip hair around the hot spot to expose it to air',
+                'Clean gently with antiseptic solution',
+                'Apply cool compresses to reduce inflammation',
+                'Use Elizabethan collar to prevent licking',
+                'Apply hydrocortisone spray if approved by vet',
+                'Keep the area clean and dry',
+                'Identify and address underlying cause (fleas, allergies)',
+            ],
+            'details': [
+                'Veterinary treatment is recommended to address the underlying cause.',
+                'Often caused by self-trauma from scratching or licking.',
+                'May require antibiotics if secondary infection develops.',
+            ],
+        },
+        'ringworm_cat': {
+            'title': 'Ringworm in cats',
+            'description': (
+                'A fungal infection of the skin, hair, or nails caused by dermatophytes.'
+            ),
+            'symptoms': [
+                'Circular patches of hair loss',
+                'Red, scaly borders around patches',
+                'Crusty or flaky skin',
+                'Broken or brittle hair',
+                'Itching (may be mild)',
+                'Multiple lesions in severe cases',
+            ],
+            'home_care': [
+                'Isolate infected cat from other pets',
+                'Clip hair around lesions',
+                'Clean with antifungal solution',
+                'Apply antifungal cream as directed',
+                'Use medicated shampoo weekly',
+                'Disinfect environment thoroughly',
+                'Wash hands after handling infected cat',
+                'Boost immune system with quality diet',
+            ],
+            'details': [
+                'Contagious to other animals and humans; veterinary treatment is necessary.',
+                'Can spread through direct contact or contaminated objects.',
+                'Treatment may take several weeks.',
+            ],
+        },
+        'ringworm_dog': {
+            'title': 'Ringworm in dogs',
+            'description': (
+                'A fungal infection of the skin, hair, or nails caused by dermatophytes.'
+            ),
+            'symptoms': [
+                'Circular patches of hair loss',
+                'Red, scaly borders around patches',
+                'Crusty or flaky skin',
+                'Broken or brittle hair',
+                'Itching (may be mild)',
+                'Multiple lesions in severe cases',
+            ],
+            'home_care': [
+                'Isolate infected dog from other pets',
+                'Clip hair around lesions',
+                'Clean with antifungal solution',
+                'Apply antifungal cream as directed',
+                'Use medicated shampoo weekly',
+                'Disinfect environment thoroughly',
+                'Wash hands after handling infected dog',
+                'Boost immune system with quality diet',
+            ],
+            'details': [
+                'Contagious to other animals and humans; veterinary treatment is necessary.',
+                'Can spread through direct contact or contaminated objects.',
+                'Treatment may take several weeks.',
+            ],
+        },
+        'scabies': {
+            'title': 'Sarcoptic mange (Scabies)',
+            'description': (
+                'A highly contagious skin condition caused by Sarcoptes mites, affecting dogs and other animals.'
+            ),
+            'symptoms': [
+                'Intense itching and scratching',
+                'Red, inflamed skin',
+                'Hair loss and crusting',
+                'Skin sores from excessive scratching',
+                'Restlessness and irritability',
+                'Weight loss in severe cases',
+                'Secondary bacterial infections',
+            ],
+            'home_care': [
+                'Isolate infected animal immediately',
+                'Bathe with medicated anti-mange shampoo',
+                'Apply soothing remedies to reduce itching (oatmeal baths)',
+                'Use Elizabethan collar to prevent scratching',
+                'Wash all bedding in hot water',
+                'Vacuum and disinfect living area thoroughly',
+                'Treat all animals in contact with infected one',
+                'Provide nutritious diet to support recovery',
+            ],
+            'details': [
+                'Immediate veterinary treatment is required to prevent spread and relieve discomfort.',
+                'Highly contagious to other animals and can affect humans.',
+                'Prescription medications are usually necessary.',
             ],
         },
         'healthy_cat': {
@@ -125,6 +364,17 @@ CLASS_INFORMATION = {
             'description': (
                 'The model classified this cat as healthy with no apparent disease patterns.'
             ),
+            'symptoms': [],
+            'home_care': [
+                'Provide balanced, age-appropriate diet',
+                'Ensure access to fresh clean water',
+                'Regular grooming and nail trimming',
+                'Provide mental stimulation and exercise',
+                'Keep vaccinations up to date',
+                'Regular veterinary check-ups (annually or bi-annually)',
+                'Maintain clean litter box',
+                'Monitor weight and behavior changes',
+            ],
             'details': [
                 'This result does not confirm the cat is completely healthy or rule out other conditions.',
                 'Regular veterinary check-ups are recommended for optimal health.',
@@ -135,6 +385,17 @@ CLASS_INFORMATION = {
             'description': (
                 'The model classified this cow as healthy with no apparent disease patterns.'
             ),
+            'symptoms': [],
+            'home_care': [
+                'Provide balanced diet with adequate roughage',
+                'Ensure access to clean water at all times',
+                'Maintain clean and comfortable shelter',
+                'Regular hoof care and trimming',
+                'Monitor body condition score',
+                'Provide mineral supplements as needed',
+                'Regular veterinary check-ups and vaccinations',
+                'Proper milking hygiene for dairy cows',
+            ],
             'details': [
                 'This result does not confirm the cow is completely healthy or rule out other conditions.',
                 'Regular veterinary check-ups are recommended for optimal health.',
@@ -145,49 +406,154 @@ CLASS_INFORMATION = {
             'description': (
                 'The model classified this dog as healthy with no apparent disease patterns.'
             ),
+            'symptoms': [],
+            'home_care': [
+                'Provide balanced, age-appropriate diet',
+                'Ensure access to fresh clean water',
+                'Regular exercise and mental stimulation',
+                'Regular grooming and dental care',
+                'Keep vaccinations up to date',
+                'Regular veterinary check-ups (annually)',
+                'Maintain healthy weight',
+                'Provide flea and tick prevention',
+            ],
             'details': [
                 'This result does not confirm the dog is completely healthy or rule out other conditions.',
                 'Regular veterinary check-ups are recommended for optimal health.',
             ],
         },
-        'hot_spots_disease': {
-            'title': 'Hot spots (acute moist dermatitis)',
-            'description': (
-                'A common skin condition in dogs characterized by red, moist, and painful lesions.'
-            ),
+    },
+    'breed': {
+        'brahman': {
+            'title': 'Brahman',
+            'description': 'A hardy zebu cattle breed known for heat tolerance and disease resistance.',
+            'market_demand': 'High - Popular in tropical and subtropical regions',
+            'general_weight': 'Bulls: 700-900 kg, Cows: 450-600 kg',
+            'market_price': '₹40,000 - ₹70,000 (varies by age and quality)',
             'details': [
-                'Often caused by self-trauma from scratching or licking due to underlying irritation.',
-                'Veterinary treatment is recommended to address the underlying cause and promote healing.',
+                'Excellent for crossbreeding to improve heat tolerance.',
+                'Good mothering ability and calving ease.',
+                'Adaptable to harsh climates.',
             ],
         },
-        'ringworm_cat': {
-            'title': 'Ringworm in cats',
-            'description': (
-                'A fungal infection of the skin, hair, or nails caused by dermatophytes.'
-            ),
+        'brahman cross': {
+            'title': 'Brahman Cross',
+            'description': 'Crossbred cattle with Brahman genetics, combining hardiness with improved productivity.',
+            'market_demand': 'High - Sought after for hybrid vigor',
+            'general_weight': 'Bulls: 650-850 kg, Cows: 400-550 kg',
+            'market_price': '₹35,000 - ₹60,000 (varies by cross)',
             'details': [
-                'Appears as circular patches of hair loss with red, scaly borders.',
-                'Contagious to other animals and humans; veterinary treatment is necessary.',
+                'Better growth rate than pure Brahman.',
+                'Improved milk production in dairy crosses.',
+                'Maintains heat tolerance and disease resistance.',
             ],
         },
-        'ringworm_dog': {
-            'title': 'Ringworm in dogs',
-            'description': (
-                'A fungal infection of the skin, hair, or nails caused by dermatophytes.'
-            ),
+        'cholistani': {
+            'title': 'Cholistani',
+            'description': 'A dual-purpose cattle breed from the Cholistan desert region of Pakistan.',
+            'market_demand': 'Moderate - Regional preference',
+            'general_weight': 'Bulls: 500-600 kg, Cows: 350-450 kg',
+            'market_price': '₹30,000 - ₹50,000',
             'details': [
-                'Appears as circular patches of hair loss with red, scaly borders.',
-                'Contagious to other animals and humans; veterinary treatment is necessary.',
+                'Well-adapted to desert conditions.',
+                'Good for both milk and meat production.',
+                'Hardy and requires minimal maintenance.',
             ],
         },
-        'scabies': {
-            'title': 'Sarcoptic mange (scabies)',
-            'description': (
-                'A highly contagious skin condition caused by Sarcoptes mites, affecting dogs and other animals.'
-            ),
+        'cholistani cross': {
+            'title': 'Cholistani Cross',
+            'description': 'Crossbred cattle with Cholistani genetics for improved productivity.',
+            'market_demand': 'Moderate - Local market preference',
+            'general_weight': 'Bulls: 550-650 kg, Cows: 380-480 kg',
+            'market_price': '₹32,000 - ₹55,000',
             'details': [
-                'Intense itching, hair loss, and skin irritation are common symptoms.',
-                'Immediate veterinary treatment is required to prevent spread and relieve discomfort.',
+                'Improved productivity while maintaining hardiness.',
+                'Good for small-scale farmers.',
+                'Adaptable to various conditions.',
+            ],
+        },
+        'dhani': {
+            'title': 'Dhani',
+            'description': 'A local cattle breed known for its adaptability.',
+            'market_demand': 'Moderate - Local demand',
+            'general_weight': 'Bulls: 450-550 kg, Cows: 300-400 kg',
+            'market_price': '₹25,000 - ₹45,000',
+            'details': [
+                'Well-suited for local farming conditions.',
+                'Good for draught and milk production.',
+                'Low maintenance requirements.',
+            ],
+        },
+        'fresian': {
+            'title': 'Friesian (Holstein)',
+            'description': 'A high-yielding dairy breed known for excellent milk production.',
+            'market_demand': 'Very High - Premier dairy breed',
+            'general_weight': 'Bulls: 900-1200 kg, Cows: 500-700 kg',
+            'market_price': '₹50,000 - ₹1,00,000 (high quality)',
+            'details': [
+                'Highest milk production among dairy breeds.',
+                'Requires good management and nutrition.',
+                'Popular in commercial dairy farming.',
+            ],
+        },
+        'fresian cross': {
+            'title': 'Friesian Cross',
+            'description': 'Crossbred cattle with Friesian genetics for improved milk production.',
+            'market_demand': 'High - Popular for dairy improvement',
+            'general_weight': 'Bulls: 800-1000 kg, Cows: 450-600 kg',
+            'market_price': '₹40,000 - ₹80,000',
+            'details': [
+                'Improved milk yield over local breeds.',
+                'Better adaptability than pure Friesian.',
+                'Suitable for small and medium farms.',
+            ],
+        },
+        'kankarej': {
+            'title': 'Kankrej',
+            'description': 'A dual-purpose breed from Gujarat, known for drought tolerance and good milk yield.',
+            'market_demand': 'High - Popular in western India',
+            'general_weight': 'Bulls: 600-800 kg, Cows: 400-550 kg',
+            'market_price': '₹35,000 - ₹65,000',
+            'details': [
+                'Excellent draught capability.',
+                'Good milk production (6-8 liters/day).',
+                'Well-adapted to semi-arid regions.',
+            ],
+        },
+        'sahiwal': {
+            'title': 'Sahiwal',
+            'description': 'A premier dairy breed from Punjab, known for high milk yield and heat tolerance.',
+            'market_demand': 'Very High - Top indigenous dairy breed',
+            'general_weight': 'Bulls: 600-800 kg, Cows: 400-500 kg',
+            'market_price': '₹45,000 - ₹80,000',
+            'details': [
+                'Excellent milk yield (8-10 liters/day).',
+                'High fat content in milk.',
+                'Heat and disease resistant.',
+            ],
+        },
+        'sahiwal cross': {
+            'title': 'Sahiwal Cross',
+            'description': 'Crossbred cattle with Sahiwal genetics for improved dairy performance.',
+            'market_demand': 'High - Sought for dairy improvement',
+            'general_weight': 'Bulls: 550-750 kg, Cows: 380-480 kg',
+            'market_price': '₹40,000 - ₹70,000',
+            'details': [
+                'Improved milk production while maintaining hardiness.',
+                'Popular for crossbreeding programs.',
+                'Good for tropical climates.',
+            ],
+        },
+        'sibbi': {
+            'title': 'Sibi',
+            'description': 'A hardy cattle breed from the Sibi region of Balochistan.',
+            'market_demand': 'Moderate - Regional preference',
+            'general_weight': 'Bulls: 500-650 kg, Cows: 350-450 kg',
+            'market_price': '₹28,000 - ₹48,000',
+            'details': [
+                'Well-adapted to harsh desert conditions.',
+                'Good for both milk and meat.',
+                'Excellent drought tolerance.',
             ],
         },
     },
@@ -560,6 +926,7 @@ class ModelService:
         top_index = int(np.argmax(probabilities))
         confidence = float(probabilities[top_index])
         is_disease = model_key == 'disease'
+        is_breed_model = model_key in ('cow_breed', 'cat_breed', 'dog_breed')
         class_name = class_names[top_index]
         
         # For disease prediction, require minimum confidence to ensure it's a valid disease image
@@ -571,19 +938,56 @@ class ModelService:
                 'detected_class': class_name,
             }
         
-        info = CLASS_INFORMATION.get(model_key, {}).get(class_name)
+        # Use 'breed' as the key for CLASS_INFORMATION lookup for breed models
+        info_key = 'breed' if is_breed_model else model_key
+        info = CLASS_INFORMATION.get(info_key, {}).get(class_name)
         if info is None:
             if is_disease:
                 description = (
                     'The model classified this image as this supported disease or health category.'
                 )
+                symptoms = [
+                    'Please consult a veterinarian for accurate symptom identification.',
+                    'Monitor the animal for any changes in behavior, appetite, or physical condition.',
+                ]
+                home_care = [
+                    'Isolate the animal from others if symptoms are present.',
+                    'Provide fresh water and appropriate nutrition.',
+                    'Keep the animal in a clean, comfortable environment.',
+                    'Contact a veterinarian for proper diagnosis and treatment.',
+                ]
+                market_demand = None
+                general_weight = None
+                market_price = None
             elif model_key == 'animal_type':
                 description = 'The model classified this image as this supported animal type.'
+                symptoms = []
+                home_care = []
+                market_demand = None
+                general_weight = None
+                market_price = None
+            elif is_breed_model:
+                description = 'The model classified this image as this supported breed.'
+                symptoms = []
+                home_care = []
+                market_demand = 'Information not available'
+                general_weight = 'Information not available'
+                market_price = 'Information not available'
             else:
                 description = 'The model classified this image as this supported breed.'
+                symptoms = []
+                home_care = []
+                market_demand = 'Information not available'
+                general_weight = 'Information not available'
+                market_price = 'Information not available'
             info = {
                 'title': class_name.replace('_', ' ').replace('-', ' ').title(),
                 'description': description,
+                'symptoms': symptoms,
+                'home_care': home_care,
+                'market_demand': market_demand,
+                'general_weight': general_weight,
+                'market_price': market_price,
                 'details': [
                     'This model result is a preliminary classification and may be incorrect.',
                     'Consult a qualified veterinarian if the animal appears unwell.',

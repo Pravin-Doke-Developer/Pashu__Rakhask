@@ -286,5 +286,69 @@
     "class_name": "healthy_dog",
     "confidence": 67.76,
     "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T12:55:52.767264+00:00",
+    "model_type": "disease",
+    "filename": "healthy_005.jpg",
+    "class_name": "healthy_dog",
+    "confidence": 95.01,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T12:56:09.001566+00:00",
+    "model_type": "breed",
+    "filename": "healthy_025.jpg",
+    "class_name": "Bearded_collie",
+    "confidence": 95.59,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T12:56:44.591082+00:00",
+    "model_type": "breed",
+    "filename": "healthy_018.jpg",
+    "class_name": "Kuvasz",
+    "confidence": 54.06,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T12:57:30.271275+00:00",
+    "model_type": "disease",
+    "filename": "flea_allergy_036.jpg",
+    "class_name": "flea_allergy",
+    "confidence": 99.76,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T13:10:02.820443+00:00",
+    "model_type": "breed",
+    "filename": "fresian cross_20.jpg",
+    "class_name": "fresian cross",
+    "confidence": 41.04,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T13:15:51.938121+00:00",
+    "model_type": "disease",
+    "filename": "cholistani_4.jpg",
+    "class_name": "Lumpy_Skin_Disease",
+    "confidence": 91.89,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T13:16:26.769047+00:00",
+    "model_type": "breed",
+    "filename": "cholistani_4.jpg",
+    "class_name": "cholistani",
+    "confidence": 85.25,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T13:20:35.411821+00:00",
+    "model_type": "breed",
+    "filename": "cholistani_4.jpg",
+    "class_name": "cholistani",
+    "confidence": 85.25,
+    "source": "api_inference"
   }
 ]

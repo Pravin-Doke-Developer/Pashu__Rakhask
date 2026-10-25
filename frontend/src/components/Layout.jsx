@@ -66,7 +66,7 @@ export default function Layout({ children }) {
             <Activity className="h-5 w-5" />
           </span>
           <span>
-            <span className="block text-[15px] font-bold tracking-tight text-slate-900">Herdwell</span>
+            <span className="block text-[15px] font-bold tracking-tight text-slate-900">PashuRakshak</span>
             <span className="mt-0.5 block text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
               Animal health AI
             </span>
