@@ -5,6 +5,34 @@ from typing import Any
 import numpy as np
 from PIL import Image
 
+# ImageNet animal class indices (subset of 1000 classes that are animals)
+IMAGENET_ANIMAL_INDICES = {
+    # Cats
+    281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298,
+    # Dogs
+    151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168,
+    169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186,
+    187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204,
+    205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222,
+    223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240,
+    241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258,
+    259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276,
+    277, 278, 279, 280,
+    # Cows and other livestock
+    326,  # ox
+    344,  # water buffalo
+    345,  # water buffalo
+    # Other animals
+    299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316,
+    317, 318, 319, 320, 321, 322, 323, 324, 325, 327, 328, 329, 330, 331, 332, 333, 334, 335,
+    336, 337, 338, 339, 340, 341, 342, 343, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355,
+    356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373,
+    374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391,
+    392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409,
+    410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427,
+    428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438,
+}
+
 
 MODEL_TYPES = ('disease', 'breed')
 ANIMAL_MODEL_KEYS = ('animal_type', 'cow_breed', 'cat_breed', 'dog_breed')
@@ -201,6 +229,7 @@ class ModelService:
         self.component_status: dict[str, str] = {}
         self.component_errors: dict[str, str] = {}
         self._tensorflow = None
+        self._imagenet_model = None  # Pre-trained model for animal detection
 
         for model_key in ('disease', *ANIMAL_MODEL_KEYS):
             self._load_model(model_key)
@@ -404,6 +433,60 @@ class ModelService:
     def _load_class_mapping(self, model_type: str) -> list[str]:
         return self.get_supported_classes(model_type)
 
+    def _get_imagenet_model(self):
+        """Lazy load the pre-trained ImageNet model for animal detection."""
+        if self._imagenet_model is None:
+            if self._tensorflow is None:
+                import tensorflow as tf
+                self._tensorflow = tf
+            # Load MobileNetV2 pre-trained on ImageNet
+            self._imagenet_model = self._tensorflow.keras.applications.MobileNetV2(
+                weights='imagenet',
+                include_top=True,
+                input_shape=(224, 224, 3)
+            )
+        return self._imagenet_model
+
+    def _validate_animal_image(self, image_path: str) -> dict:
+        """Validate that the image contains an animal using pre-trained ImageNet model."""
+        try:
+            # Load pre-trained model
+            imagenet_model = self._get_imagenet_model()
+            
+            # Prepare image for ImageNet model
+            image = Image.open(image_path).convert('RGB')
+            image_array = np.asarray(image, dtype=np.float32)
+            resized = self._tensorflow.image.resize(image_array, (224, 224))
+            # MobileNetV2 expects preprocessing
+            preprocessed = self._tensorflow.keras.applications.mobilenet_v2.preprocess_input(resized)
+            image_batch = self._tensorflow.expand_dims(preprocessed, axis=0)
+            
+            # Get predictions
+            predictions = imagenet_model.predict(image_batch, verbose=0)
+            top_5_indices = np.argsort(predictions[0])[-5:][::-1]
+            top_5_probs = predictions[0][top_5_indices]
+            
+            # Check if any of the top predictions are animal classes
+            animal_prob_sum = 0.0
+            for idx, prob in zip(top_5_indices, top_5_probs):
+                if idx in IMAGENET_ANIMAL_INDICES:
+                    animal_prob_sum += prob
+            
+            # If the total probability of animal classes in top 5 is less than 60%, reject
+            if animal_prob_sum < 0.6:
+                return {
+                    'status': 'error',
+                    'error': 'Invalid image. Please upload a valid animal image.',
+                    'animal_probability': round(animal_prob_sum * 100, 2),
+                }
+            
+            return {'status': 'ok'}
+        except Exception as exc:
+            # If validation fails, allow the prediction to proceed
+            # This ensures we don't block valid predictions due to validation errors
+            print(f"Animal validation error: {exc}")
+            return {'status': 'ok'}
+
     def _prepare_image(self, model_key: str, image_path: str) -> np.ndarray:
         image_size = self.metadata[model_key]['image_size']
         image = Image.open(image_path).convert('RGB')
@@ -428,6 +511,13 @@ class ModelService:
             }
 
         try:
+            # Validate that the image contains an animal before prediction
+            # Only validate for breed prediction since disease prediction may use close-up images of affected areas
+            if model_type == 'breed':
+                validation_result = self._validate_animal_image(image_path)
+                if validation_result.get('status') != 'ok':
+                    return validation_result
+
             if model_type == 'breed':
                 result = self._predict_breed(image_path)
                 if result.get('status') != 'ok':
@@ -468,8 +558,19 @@ class ModelService:
             raise ValueError('Model returned invalid class probabilities.')
 
         top_index = int(np.argmax(probabilities))
+        confidence = float(probabilities[top_index])
         is_disease = model_key == 'disease'
         class_name = class_names[top_index]
+        
+        # For disease prediction, require minimum confidence to ensure it's a valid disease image
+        if is_disease and confidence < 0.5:
+            return {
+                'status': 'error',
+                'error': 'Invalid image. Please upload a valid animal disease image.',
+                'confidence': round(confidence * 100, 2),
+                'detected_class': class_name,
+            }
+        
         info = CLASS_INFORMATION.get(model_key, {}).get(class_name)
         if info is None:
             if is_disease:

@@ -126,5 +126,165 @@
     "class_name": "Lowchen",
     "confidence": 45.62,
     "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T09:29:49.309832+00:00",
+    "model_type": "disease",
+    "filename": "camera-1792920577870.jpg",
+    "class_name": "scabies",
+    "confidence": 32.12,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T09:30:15.741091+00:00",
+    "model_type": "breed",
+    "filename": "camera-1792920608752.jpg",
+    "class_name": "himalayan",
+    "confidence": 99.07,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T09:40:30.197137+00:00",
+    "model_type": "disease",
+    "filename": "camera-1792921210114.jpg",
+    "class_name": "Mastitis_Disease",
+    "confidence": 56.15,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T09:43:28.792894+00:00",
+    "model_type": "breed",
+    "filename": "Border_collie_004.jpg",
+    "class_name": "Border_collie",
+    "confidence": 100.0,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T09:52:33.633783+00:00",
+    "model_type": "disease",
+    "filename": "camera-1792921947511.jpg",
+    "class_name": "Foot_and_Mouth_Disease",
+    "confidence": 51.66,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T09:57:48.931132+00:00",
+    "model_type": "disease",
+    "filename": "camera-1792922260779.jpg",
+    "class_name": "Mastitis_Disease",
+    "confidence": 80.2,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T09:58:50.051487+00:00",
+    "model_type": "disease",
+    "filename": "camera-1792922328263.jpg",
+    "class_name": "Mastitis_Disease",
+    "confidence": 63.88,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:00:21.141955+00:00",
+    "model_type": "disease",
+    "filename": "ringworm_002.jpg",
+    "class_name": "ringworm_cat",
+    "confidence": 88.21,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:00:35.844845+00:00",
+    "model_type": "disease",
+    "filename": "_126252953_lumpyskin.jpg",
+    "class_name": "Mastitis_Disease",
+    "confidence": 70.38,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:00:48.522885+00:00",
+    "model_type": "disease",
+    "filename": "_126252953_lumpyskin.jpg",
+    "class_name": "Mastitis_Disease",
+    "confidence": 70.38,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:02:57.371329+00:00",
+    "model_type": "disease",
+    "filename": "istockphoto-1044059312-1024x1024.jpg",
+    "class_name": "demodicosis",
+    "confidence": 95.28,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:04:31.088889+00:00",
+    "model_type": "disease",
+    "filename": "187394-fwtynapqby-1677572790.jpg",
+    "class_name": "Lumpy_Skin_Disease",
+    "confidence": 99.68,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:06:11.915161+00:00",
+    "model_type": "disease",
+    "filename": "sick-stray-cat-with-skin-disease-3CEAJXB.jpg",
+    "class_name": "ringworm_cat",
+    "confidence": 52.93,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:08:08.139574+00:00",
+    "model_type": "breed",
+    "filename": "wild-cat-with-skin-cancer-with-yellow-eyes-close-up-2ER3N69.jpg",
+    "class_name": "russian blue",
+    "confidence": 69.34,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:10:17.247664+00:00",
+    "model_type": "breed",
+    "filename": "Screenshot 2026-10-25 153953.png",
+    "class_name": "russian blue",
+    "confidence": 100.0,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:24:12.135505+00:00",
+    "model_type": "breed",
+    "filename": "Chow_chow_006.jpg",
+    "class_name": "Chow_chow",
+    "confidence": 100.0,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:24:53.709446+00:00",
+    "model_type": "disease",
+    "filename": "scabies_167.jpg",
+    "class_name": "scabies",
+    "confidence": 94.85,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:25:20.619661+00:00",
+    "model_type": "disease",
+    "filename": "flea_allergy_031.jpg",
+    "class_name": "flea_allergy",
+    "confidence": 98.06,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:25:49.989822+00:00",
+    "model_type": "disease",
+    "filename": "mastitis_743.jpg",
+    "class_name": "Mastitis_Disease",
+    "confidence": 97.25,
+    "source": "api_inference"
+  },
+  {
+    "timestamp": "2026-10-25T10:26:16.544216+00:00",
+    "model_type": "disease",
+    "filename": "healthy_016.jpg",
+    "class_name": "healthy_dog",
+    "confidence": 67.76,
+    "source": "api_inference"
   }
 ]

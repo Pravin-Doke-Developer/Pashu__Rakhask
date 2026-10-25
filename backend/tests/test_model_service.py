@@ -121,7 +121,15 @@ class TestModelService(unittest.TestCase):
 
         image_path = self.project_root / 'input.png'
         Image.new('RGB', (224, 224), (100, 120, 140)).save(image_path, format='PNG')
-        result = self.service.predict('breed', str(image_path))
+        
+        # Mock the ImageNet model to return high animal probability
+        with patch.object(self.service, '_get_imagenet_model') as mock_imagenet:
+            mock_model = Mock()
+            mock_model.predict.return_value = np.array([[0.1] * 1000], dtype=np.float32)
+            mock_model.predict.return_value[0][151] = 0.8  # Dog class
+            mock_imagenet.return_value = mock_model
+            
+            result = self.service.predict('breed', str(image_path))
 
         self.assertEqual(result['status'], 'ok')
         self.assertEqual(result['class_name'], 'brahman')
@@ -152,7 +160,14 @@ class TestModelService(unittest.TestCase):
         image_path = self.project_root / 'input.png'
         Image.new('RGB', (224, 224), (100, 120, 140)).save(image_path, format='PNG')
 
-        result = self.service.predict('breed', str(image_path))
+        # Mock the ImageNet model to return high animal probability
+        with patch.object(self.service, '_get_imagenet_model') as mock_imagenet:
+            mock_model = Mock()
+            mock_model.predict.return_value = np.array([[0.1] * 1000], dtype=np.float32)
+            mock_model.predict.return_value[0][281] = 0.8  # Cat class
+            mock_imagenet.return_value = mock_model
+            
+            result = self.service.predict('breed', str(image_path))
 
         self.assertEqual(result['animal_type'], 'cat')
         self.assertEqual(result['class_name'], 'siamese')
@@ -176,6 +191,96 @@ class TestModelService(unittest.TestCase):
 
         self.assertEqual(result['status'], 'error')
         self.assertIn('device failure', result['error'])
+
+    def test_rejects_images_with_low_animal_confidence(self):
+        # Mock the ImageNet model to return low animal probability (non-animal image)
+        image_path = self.project_root / 'input.png'
+        Image.new('RGB', (224, 224), (100, 120, 140)).save(image_path, format='PNG')
+
+        with patch.object(self.service, '_get_imagenet_model') as mock_imagenet:
+            mock_model = Mock()
+            # Return predictions for non-animal classes (e.g., car, building)
+            mock_model.predict.return_value = np.array([[0.1] * 1000], dtype=np.float32)
+            mock_model.predict.return_value[0][817] = 0.7  # car class (non-animal)
+            mock_imagenet.return_value = mock_model
+            
+            result = self.service.predict('breed', str(image_path))
+
+        self.assertEqual(result['status'], 'error')
+        self.assertIn('Invalid image', result['error'])
+        self.assertIn('valid animal image', result['error'])
+
+    def test_accepts_images_with_high_animal_confidence(self):
+        # Mock the ImageNet model to return high animal probability
+        image_path = self.project_root / 'input.png'
+        Image.new('RGB', (224, 224), (100, 120, 140)).save(image_path, format='PNG')
+
+        with patch.object(self.service, '_get_imagenet_model') as mock_imagenet:
+            mock_model = Mock()
+            mock_model.predict.return_value = np.array([[0.1] * 1000], dtype=np.float32)
+            mock_model.predict.return_value[0][151] = 0.8  # Dog class (animal)
+            mock_imagenet.return_value = mock_model
+            
+            result = self.service.predict('breed', str(image_path))
+
+        self.assertEqual(result['status'], 'ok')
+        self.assertEqual(result['class_name'], 'brahman')
+
+    def test_rejects_images_with_uncertain_predictions(self):
+        # Mock the ImageNet model to return low animal probability
+        image_path = self.project_root / 'input.png'
+        Image.new('RGB', (224, 224), (100, 120, 140)).save(image_path, format='PNG')
+
+        with patch.object(self.service, '_get_imagenet_model') as mock_imagenet:
+            mock_model = Mock()
+            # Return predictions with low animal probability
+            mock_model.predict.return_value = np.array([[0.1] * 1000], dtype=np.float32)
+            mock_model.predict.return_value[0][151] = 0.4  # Dog class but low probability
+            mock_imagenet.return_value = mock_model
+            
+            result = self.service.predict('breed', str(image_path))
+
+        self.assertEqual(result['status'], 'error')
+        self.assertIn('Invalid image', result['error'])
+
+    def test_disease_prediction_skips_animal_validation(self):
+        # Disease prediction should not validate for animal presence
+        # This allows close-up images of affected areas
+        image_path = self.project_root / 'input.png'
+        Image.new('RGB', (224, 224), (100, 120, 140)).save(image_path, format='PNG')
+
+        # Even if ImageNet model would reject this as non-animal, disease prediction should proceed
+        with patch.object(self.service, '_get_imagenet_model') as mock_imagenet:
+            mock_model = Mock()
+            mock_model.predict.return_value = np.array([[0.1] * 1000], dtype=np.float32)
+            mock_model.predict.return_value[0][817] = 0.7  # car class (non-animal)
+            mock_imagenet.return_value = mock_model
+            
+            result = self.service.predict('disease', str(image_path))
+
+        # Disease prediction should succeed despite non-animal ImageNet prediction
+        self.assertEqual(result['status'], 'ok')
+        self.assertEqual(result['class_name'], 'healthy_cow')
+        # ImageNet model should not be called for disease prediction
+        mock_imagenet.assert_not_called()
+
+    def test_disease_prediction_rejects_low_confidence(self):
+        # Disease prediction should reject images with low confidence
+        # Modify the disease model to return low confidence (40%)
+        original_predict = self.models['disease'].predict
+        self.models['disease'].predict = Mock(side_effect=lambda batch, verbose=0: np.array([[0.1, 0.4, 0.5]], dtype=np.float32))
+        
+        image_path = self.project_root / 'input.png'
+        Image.new('RGB', (224, 224), (100, 120, 140)).save(image_path, format='PNG')
+
+        result = self.service.predict('disease', str(image_path))
+
+        self.assertEqual(result['status'], 'error')
+        self.assertIn('Invalid image', result['error'])
+        self.assertIn('valid animal disease image', result['error'])
+        
+        # Restore original predict
+        self.models['disease'].predict = original_predict
 
 
 if __name__ == '__main__':
