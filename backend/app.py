@@ -17,7 +17,15 @@ def create_app():
     app.extensions['model_service'] = ModelService()
     app.extensions['history_service'] = HistoryService()
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    CORS(app, resources={r'/*': {'origins': '*'}})
+    
+    # Configure CORS with explicit headers to prevent intermittent errors
+    CORS(app, resources={r'/*': {
+        'origins': '*',
+        'methods': ['GET', 'POST', 'OPTIONS'],
+        'allow_headers': ['Content-Type'],
+        'max_age': 86400,
+    }})
+    
     app.register_blueprint(health_bp)
     app.register_blueprint(prediction_bp)
     return app

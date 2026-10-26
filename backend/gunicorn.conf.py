@@ -1,8 +1,8 @@
 import multiprocessing
 
 # Timeout for silent workers (in seconds)
-# Increased to 120 seconds to allow time for model loading
-timeout = 120
+# Increased to 180 seconds to allow time for model loading and prediction on slow Render free tier
+timeout = 180
 
 # Number of worker processes
 # Set to 1 to conserve memory on Render free tier
@@ -16,12 +16,15 @@ worker_class = 'sync'
 worker_connections = 1000
 
 # Max requests per worker before restart
-# Helps prevent memory leaks
-max_requests = 1000
-max_requests_jitter = 50
+# Reduced to prevent memory accumulation
+max_requests = 100
+max_requests_jitter = 10
 
 # Keepalive timeout
 keepalive = 2
+
+# Graceful timeout for worker shutdown
+graceful_timeout = 30
 
 # Preload app (reduces memory overhead per worker)
 preload_app = True
