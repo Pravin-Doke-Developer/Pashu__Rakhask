@@ -8,6 +8,10 @@ from typing import Any
 import numpy as np
 from PIL import Image
 
+# Optimize TensorFlow memory usage before import
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow warnings
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'  # Disable oneDNN to reduce memory
+
 # ImageNet animal class indices (subset of 1000 classes that are animals)
 IMAGENET_ANIMAL_INDICES = {
     # Cats
@@ -765,6 +769,14 @@ class ModelService:
             metadata = self._read_metadata(metadata_path, class_names, model_key)
             if self._tensorflow is None:
                 import tensorflow as tf
+                # Configure TensorFlow to use less memory
+                gpus = tf.config.list_physical_devices('GPU')
+                if gpus:
+                    try:
+                        for gpu in gpus:
+                            tf.config.experimental.set_memory_growth(gpu, True)
+                    except RuntimeError as e:
+                        print(f'[WARNING] GPU memory configuration failed: {e}')
                 self._tensorflow = tf
             model = self._tensorflow.keras.models.load_model(model_path, compile=False)
             metadata = self._complete_metadata(model, metadata)
