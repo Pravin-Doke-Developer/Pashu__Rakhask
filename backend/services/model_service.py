@@ -1,5 +1,7 @@
 import json
 import os
+import shutil
+import threading
 from pathlib import Path
 from typing import Any
 
@@ -597,97 +599,158 @@ class ModelService:
         self.component_errors: dict[str, str] = {}
         self._tensorflow = None
         self._imagenet_model = None  # Pre-trained model for animal detection
+        self._load_lock = threading.RLock()
 
-        # Download missing model and class-mapping files from the private Hugging Face repo.
-        self._ensure_artifacts_available()
-
+        # Read lightweight class mappings locally at startup. This does not import
+        # TensorFlow and does not perform network requests.
+        self._mapping_errors: dict[str, str] = {}
         for model_key in ('disease', *ANIMAL_MODEL_KEYS):
-            self._load_model(model_key)
+            mapping_path = self.mapping_paths[model_key]
+            if not mapping_path.is_file():
+                self._mapping_errors[model_key] = (
+                    f'Required class names file is missing: {mapping_path.name}.'
+                )
+                continue
+            try:
+                self.class_names[model_key] = self._read_class_names(mapping_path)
+            except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+                self._mapping_errors[model_key] = (
+                    f'Unable to read class names for {model_key}: {exc}'
+                )
+
+        # Record local artifact state without downloading or loading any models.
+        for model_key in ('disease', *ANIMAL_MODEL_KEYS):
+            model_path = self.model_paths[model_key]
+            if model_key in self._mapping_errors:
+                self.component_status[model_key] = 'unavailable'
+                self.component_errors[model_key] = self._mapping_errors[model_key]
+            elif not model_path.is_file():
+                self.component_status[model_key] = 'missing'
+                self.component_errors[model_key] = (
+                    f'Model artifact file is missing: {model_path.name}.'
+                )
+            else:
+                # Artifacts and class labels exist; the TensorFlow model is not loaded yet.
+                self.component_status[model_key] = 'not_loaded'
+
         self._update_public_status()
 
+    def _ensure_artifact_available(self, local_path: Path) -> bool:
+        """Download one missing artifact on demand, preserving existing local files."""
+        if local_path.is_file():
+            return True
 
-    def _ensure_artifacts_available(self) -> None:
-        """Download missing model and class-mapping files from private Hugging Face storage."""
         repo_id = os.getenv('HF_MODEL_REPO', 'PRAVIN9087/pashurakshak-model')
         token = os.getenv('HF_TOKEN')
-
-        required_paths = {
-            **self.model_paths,
-            **{f'{key}_classes': path for key, path in self.mapping_paths.items()},
-        }
-        missing_paths = [
-            path for path in required_paths.values()
-            if not path.is_file()
-        ]
-        if not missing_paths:
-            return
-
         if not token:
-            print('HF_TOKEN is not configured; model artifacts cannot be downloaded.')
-            return
+            print(f'HF_TOKEN is not configured; cannot download {local_path.name}.')
+            return False
 
+        temp_path = local_path.with_name(f'.{local_path.name}.{os.getpid()}.tmp')
         try:
             from huggingface_hub import hf_hub_download
 
-            for local_path in missing_paths:
-                relative_path = local_path.relative_to(self.project_root).as_posix()
-                print(f'Downloading model artifact: {relative_path}')
-                hf_hub_download(
-                    repo_id=repo_id,
-                    filename=relative_path,
-                    repo_type='model',
-                    token=token,
-                    local_dir=str(self.project_root),
+            relative_path = local_path.relative_to(self.project_root).as_posix()
+            print(f'Downloading missing model artifact on demand: {relative_path}')
+            cached_path = Path(hf_hub_download(
+                repo_id=repo_id,
+                filename=relative_path,
+                repo_type='model',
+                token=token,
+            ))
+            if not cached_path.is_file() or cached_path.stat().st_size == 0:
+                raise FileNotFoundError(
+                    f'Hugging Face returned an empty or missing artifact: {relative_path}'
                 )
-                if not local_path.is_file():
-                    raise FileNotFoundError(
-                        f'Hugging Face download completed but file was not found: {local_path}'
-                    )
-            print('All required model and class-mapping files are available.')
+
+            local_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(cached_path, temp_path)
+            if temp_path.stat().st_size == 0:
+                raise OSError(f'Downloaded artifact is empty: {relative_path}')
+            # Atomic replacement prevents readers from seeing a partially copied file.
+            os.replace(temp_path, local_path)
+            return True
         except Exception as exc:
-            # Keep the service alive so health/status routes can report missing artifacts.
-            print(f'Unable to download model artifacts from Hugging Face: {exc}')
+            print(f'Unable to download model artifact {local_path.name}: {exc}')
+            return False
+        finally:
+            try:
+                if temp_path.exists():
+                    temp_path.unlink()
+            except OSError:
+                pass
+
+    def _ensure_model_loaded(self, model_key: str) -> bool:
+        """Load one model on demand, avoiding simultaneous loads of the same model."""
+        if model_key in self.models:
+            return True
+        if model_key not in self.model_paths:
+            self.component_errors[model_key] = f'Unknown model key: {model_key}.'
+            return False
+
+        with self._load_lock:
+            if model_key in self.models:
+                return True
+            self._load_model(model_key)
+            self._update_public_status()
+            return model_key in self.models
 
     def _load_model(self, model_key: str) -> None:
         model_path = self.model_paths[model_key]
         mapping_path = self.mapping_paths[model_key]
         metadata_path = self.metadata_paths[model_key]
-        if not model_path.is_file():
-            self.component_status[model_key] = 'missing'
-            self.component_errors[model_key] = f'Model artifact file is missing: {model_path.name}.'
+
+        # Retry downloads only when an artifact is missing, and only when this
+        # particular model is requested. Existing files are never overwritten.
+        if not mapping_path.is_file():
+            if self._ensure_artifact_available(mapping_path):
+                try:
+                    self.class_names[model_key] = self._read_class_names(mapping_path)
+                    self._mapping_errors.pop(model_key, None)
+                except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+                    self._mapping_errors[model_key] = (
+                        f'Unable to read class names for {model_key}: {exc}'
+                    )
+            else:
+                self._mapping_errors[model_key] = (
+                    f'Required class names file is missing: {mapping_path.name}; '
+                    'download was unavailable or failed.'
+                )
+
+        if model_key in self._mapping_errors or model_key not in self.class_names:
+            self.component_status[model_key] = 'unavailable'
+            self.component_errors[model_key] = self._mapping_errors.get(
+                model_key, f'Class names for {model_key} are unavailable.'
+            )
             return
 
-        if not mapping_path.is_file():
-            self.component_status[model_key] = 'unavailable'
+        if not model_path.is_file() and not self._ensure_artifact_available(model_path):
+            self.component_status[model_key] = 'missing'
             self.component_errors[model_key] = (
-                f'Required class names file is missing: {mapping_path.name}.'
+                f'Model artifact file is missing: {model_path.name}; '
+                'download was unavailable or failed.'
             )
             return
 
         try:
-            class_names = self._read_class_names(mapping_path)
+            class_names = self.class_names[model_key]
             metadata = self._read_metadata(metadata_path, class_names, model_key)
             if self._tensorflow is None:
                 import tensorflow as tf
-
                 self._tensorflow = tf
             model = self._tensorflow.keras.models.load_model(model_path, compile=False)
             metadata = self._complete_metadata(model, metadata)
             self._validate_model_shape(model, metadata, class_names)
-        except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError, ImportError) as exc:
-            self.component_status[model_key] = 'unavailable'
-            self.component_errors[model_key] = f'Unable to load {model_key} model: {exc}'
-            return
-        except Exception as exc:  # TensorFlow raises backend-specific errors for bad artifacts.
+        except Exception as exc:  # Includes TensorFlow backend-specific load errors.
             self.component_status[model_key] = 'unavailable'
             self.component_errors[model_key] = f'Unable to load {model_key} model: {exc}'
             return
 
         self.models[model_key] = model
-        self.class_names[model_key] = class_names
         self.metadata[model_key] = metadata
         self.component_status[model_key] = 'ready'
         self.component_errors.pop(model_key, None)
+        self._mapping_errors.pop(model_key, None)
 
     @staticmethod
     def _read_class_names(path: Path) -> list[str]:
@@ -795,8 +858,9 @@ class ModelService:
             )
 
     def _update_public_status(self) -> None:
-        self.model_status['disease'] = self.component_status.get('disease', 'missing')
-        if self.model_status['disease'] != 'ready':
+        disease_component_status = self.component_status.get('disease', 'missing')
+        self.model_status['disease'] = 'not_loaded' if disease_component_status == 'not_loaded' else disease_component_status
+        if self.model_status['disease'] not in ('ready', 'not_loaded'):
             self.model_errors['disease'] = self.component_errors.get(
                 'disease', 'The disease model is not configured.'
             )
@@ -807,7 +871,7 @@ class ModelService:
         unavailable = [
             (key, self.component_errors.get(key, f'{key} model is unavailable.'))
             for key in required_breed_models
-            if self.component_status.get(key) != 'ready'
+            if self.component_status.get(key) not in ('ready', 'not_loaded')
         ]
         self.model_status['breed'] = 'ready' if not unavailable else (
             'missing' if all(self.component_status.get(key) == 'missing' for key, _ in unavailable)
@@ -821,13 +885,23 @@ class ModelService:
             self.model_errors.pop('breed', None)
 
     def get_status(self) -> dict[str, str]:
-        return self.model_status.copy()
+        # Report artifact readiness, not whether a model is currently resident in memory.
+        # This keeps /status lightweight and prevents it from loading TensorFlow models.
+        status = self.model_status.copy()
+        for key, value in status.items():
+            if value == 'not_loaded':
+                status[key] = 'ready'
+        return status
 
     def get_errors(self) -> dict[str, str]:
         return self.model_errors.copy()
 
+    def get_component_status(self) -> dict[str, str]:
+        """Return per-model lifecycle state without changing the public status API."""
+        return self.component_status.copy()
+
     def is_available(self, model_type: str) -> bool:
-        return self.model_status.get(model_type) == 'ready'
+        return self.model_status.get(model_type) in ('ready', 'not_loaded')
 
     def get_supported_classes(self, model_type: str) -> list[str]:
         if model_type == 'disease':
@@ -913,14 +987,17 @@ class ModelService:
         if model_type not in MODEL_TYPES:
             return {'status': 'error', 'error': f'Unknown model type: {model_type}'}
 
-        if not self._has_model(model_type):
+        # Load only the requested path. In particular, a missing breed model
+        # should not prevent the disease endpoint from working, and vice versa.
+        if model_type == 'disease' and not self._ensure_model_loaded('disease'):
+            self._update_public_status()
             return {
                 'status': 'error',
                 'model_type': model_type,
-                'error': self.model_errors.get(
-                    model_type, f'The {model_type} model is not configured.'
+                'error': self.component_errors.get(
+                    'disease', 'The disease model is not configured.'
                 ),
-                'supported_classes': self._load_class_mapping(model_type),
+                'supported_classes': self.get_supported_classes('disease'),
             }
 
         try:
@@ -951,6 +1028,9 @@ class ModelService:
             }
 
     def _predict_single_model(self, model_key: str, image_path: str) -> dict:
+        if not self._ensure_model_loaded(model_key):
+            error = self.component_errors.get(model_key, f'The {model_key} model could not be loaded.')
+            raise RuntimeError(error)
         image_batch = self._prepare_image(model_key, image_path)
         prediction = np.asarray(
             self.models[model_key].predict(image_batch, verbose=0),
