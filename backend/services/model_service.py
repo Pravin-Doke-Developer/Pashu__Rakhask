@@ -901,6 +901,7 @@ class ModelService:
         return self.component_status.copy()
 
     def is_available(self, model_type: str) -> bool:
+        """Check if a model is available (artifacts exist locally)."""
         return self.model_status.get(model_type) in ('ready', 'not_loaded')
 
     def get_supported_classes(self, model_type: str) -> list[str]:

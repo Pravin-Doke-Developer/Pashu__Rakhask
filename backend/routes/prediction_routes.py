@@ -43,16 +43,6 @@ def _predict_image(model_type: str):
     # Reset the upload stream after validation so the entire image is saved.
     file_storage.stream.seek(0)
 
-    if not model_service.is_available(model_type):
-        return jsonify({
-            'status': 'error',
-            'error': model_service.get_errors().get(
-                model_type, f'The {model_type} model is not configured.'
-            ),
-            'model_type': model_type,
-            'supported_classes': model_service.get_supported_classes(model_type),
-        }), 503
-
     filename = file_storage.filename
     dest_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], model_type)
     image_path = save_uploaded_image(file_storage, dest_dir)
@@ -60,7 +50,9 @@ def _predict_image(model_type: str):
     try:
         result = model_service.predict(model_type, image_path)
         if result.get('status') != 'ok':
-            return jsonify(result), 500
+            # Return 503 for model unavailability, 500 for other errors
+            status_code = 503 if 'not configured' in result.get('error', '') or 'could not be loaded' in result.get('error', '') else 500
+            return jsonify(result), status_code
 
         entry = {
             'timestamp': datetime.now(timezone.utc).isoformat(),
