@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -597,9 +598,55 @@ class ModelService:
         self._tensorflow = None
         self._imagenet_model = None  # Pre-trained model for animal detection
 
+        # Download missing model and class-mapping files from the private Hugging Face repo.
+        self._ensure_artifacts_available()
+
         for model_key in ('disease', *ANIMAL_MODEL_KEYS):
             self._load_model(model_key)
         self._update_public_status()
+
+
+    def _ensure_artifacts_available(self) -> None:
+        """Download missing model and class-mapping files from private Hugging Face storage."""
+        repo_id = os.getenv('HF_MODEL_REPO', 'PRAVIN9087/pashurakshak-model')
+        token = os.getenv('HF_TOKEN')
+
+        required_paths = {
+            **self.model_paths,
+            **{f'{key}_classes': path for key, path in self.mapping_paths.items()},
+        }
+        missing_paths = [
+            path for path in required_paths.values()
+            if not path.is_file()
+        ]
+        if not missing_paths:
+            return
+
+        if not token:
+            print('HF_TOKEN is not configured; model artifacts cannot be downloaded.')
+            return
+
+        try:
+            from huggingface_hub import hf_hub_download
+
+            for local_path in missing_paths:
+                relative_path = local_path.relative_to(self.project_root).as_posix()
+                print(f'Downloading model artifact: {relative_path}')
+                hf_hub_download(
+                    repo_id=repo_id,
+                    filename=relative_path,
+                    repo_type='model',
+                    token=token,
+                    local_dir=str(self.project_root),
+                )
+                if not local_path.is_file():
+                    raise FileNotFoundError(
+                        f'Hugging Face download completed but file was not found: {local_path}'
+                    )
+            print('All required model and class-mapping files are available.')
+        except Exception as exc:
+            # Keep the service alive so health/status routes can report missing artifacts.
+            print(f'Unable to download model artifacts from Hugging Face: {exc}')
 
     def _load_model(self, model_key: str) -> None:
         model_path = self.model_paths[model_key]
