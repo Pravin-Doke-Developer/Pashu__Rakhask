@@ -641,16 +641,11 @@ class ModelService:
 
     def _ensure_artifact_available(self, local_path: Path) -> bool:
         """Download one missing artifact on demand, preserving existing local files."""
-        print(f'[DEBUG] _ensure_artifact_available called for: {local_path}')
-        
         if local_path.is_file():
-            print(f'[DEBUG] Artifact already exists locally: {local_path}')
             return True
 
         repo_id = os.getenv('HF_MODEL_REPO', 'PRAVIN9087/pashurakshak-model')
         token = os.getenv('HF_TOKEN')
-        print(f'[DEBUG] HF_MODEL_REPO: {repo_id}')
-        print(f'[DEBUG] HF_TOKEN configured: {bool(token)}')
         
         if not token:
             print(f'[ERROR] HF_TOKEN is not configured; cannot download {local_path.name}.')
@@ -659,11 +654,8 @@ class ModelService:
         temp_path = local_path.with_name(f'.{local_path.name}.{os.getpid()}.tmp')
         try:
             from huggingface_hub import hf_hub_download
-            print(f'[DEBUG] huggingface_hub imported successfully')
 
             relative_path = local_path.relative_to(self.project_root).as_posix()
-            print(f'[DEBUG] Project root: {self.project_root}')
-            print(f'[DEBUG] Relative path for download: {relative_path}')
             print(f'[INFO] Downloading missing model artifact on demand: {relative_path}')
             
             cached_path = Path(hf_hub_download(
@@ -672,7 +664,6 @@ class ModelService:
                 repo_type='model',
                 token=token,
             ))
-            print(f'[DEBUG] Downloaded to cached path: {cached_path}')
             
             if not cached_path.is_file() or cached_path.stat().st_size == 0:
                 raise FileNotFoundError(
@@ -680,22 +671,18 @@ class ModelService:
                 )
 
             local_path.parent.mkdir(parents=True, exist_ok=True)
-            print(f'[DEBUG] Created directory: {local_path.parent}')
             
             shutil.copyfile(cached_path, temp_path)
-            print(f'[DEBUG] Copied to temp path: {temp_path}')
             
             if temp_path.stat().st_size == 0:
                 raise OSError(f'Downloaded artifact is empty: {relative_path}')
             
             # Atomic replacement prevents readers from seeing a partially copied file.
             os.replace(temp_path, local_path)
-            print(f'[DEBUG] Successfully installed artifact: {local_path}')
+            print(f'[INFO] Successfully installed artifact: {local_path.name}')
             return True
         except Exception as exc:
             print(f'[ERROR] Unable to download model artifact {local_path.name}: {exc}')
-            import traceback
-            traceback.print_exc()
             return False
         finally:
             try:
@@ -706,25 +693,20 @@ class ModelService:
 
     def _ensure_model_loaded(self, model_key: str) -> bool:
         """Load one model on demand, avoiding simultaneous loads of the same model."""
-        print(f'[DEBUG] _ensure_model_loaded called for: {model_key}')
-        
         if model_key in self.models:
-            print(f'[DEBUG] Model {model_key} already loaded')
             return True
         if model_key not in self.model_paths:
-            print(f'[ERROR] Unknown model key: {model_key}')
             self.component_errors[model_key] = f'Unknown model key: {model_key}.'
             return False
 
         with self._load_lock:
             if model_key in self.models:
-                print(f'[DEBUG] Model {model_key} loaded by another thread')
                 return True
-            print(f'[DEBUG] Attempting to load model: {model_key}')
+            print(f'[INFO] Loading model: {model_key}')
             self._load_model(model_key)
             self._update_public_status()
             loaded = model_key in self.models
-            print(f'[DEBUG] Model {model_key} load result: {loaded}')
+            print(f'[INFO] Model {model_key} load result: {"success" if loaded else "failed"}')
             return loaded
 
     def _load_model(self, model_key: str) -> None:
@@ -1025,17 +1007,13 @@ class ModelService:
         return self._tensorflow.expand_dims(resized, axis=0)
 
     def predict(self, model_type: str, image_path: str) -> dict:
-        print(f'[DEBUG] predict called for model_type: {model_type}, image_path: {image_path}')
-        
         if model_type not in MODEL_TYPES:
             return {'status': 'error', 'error': f'Unknown model type: {model_type}'}
 
         # Load only the requested path. In particular, a missing breed model
         # should not prevent the disease endpoint from working, and vice versa.
         if model_type == 'disease':
-            print(f'[DEBUG] Loading disease model...')
             if not self._ensure_model_loaded('disease'):
-                print(f'[DEBUG] Disease model load failed')
                 self._update_public_status()
                 return {
                     'status': 'error',
@@ -1045,15 +1023,14 @@ class ModelService:
                     ),
                     'supported_classes': self.get_supported_classes('disease'),
                 }
-            print(f'[DEBUG] Disease model loaded successfully')
 
         try:
-            # Validate that the image contains an animal before prediction
-            # Only validate for breed prediction since disease prediction may use close-up images of affected areas
-            if model_type == 'breed':
-                validation_result = self._validate_animal_image(image_path)
-                if validation_result.get('status') != 'ok':
-                    return validation_result
+            # Skip ImageNet validation for breed prediction to conserve memory on Render
+            # The breed models themselves handle animal type classification
+            # if model_type == 'breed':
+            #     validation_result = self._validate_animal_image(image_path)
+            #     if validation_result.get('status') != 'ok':
+            #         return validation_result
 
             if model_type == 'breed':
                 result = self._predict_breed(image_path)
